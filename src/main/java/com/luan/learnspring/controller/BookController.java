@@ -1,5 +1,6 @@
 package com.luan.learnspring.controller;
 
+import com.luan.learnspring.dto.BookSearch;
 import com.luan.learnspring.model.Book;
 import com.luan.learnspring.repository.BookRepository;
 import com.luan.learnspring.specification.GenSpec;
@@ -10,10 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,15 +22,12 @@ public class BookController {
 
     @GetMapping
     public Page<Book> getBooks(Pageable pageable,
-                               @RequestParam(defaultValue = "") String title,
-                               @RequestParam(defaultValue = "") String author,
-                               @RequestParam(defaultValue = "") int year,
-                               @RequestParam(defaultValue = "") LocalDate publishedAt) {
+                               BookSearch search) {
         Specification<Book> spec = new SpecificationBuilder<Book>()
-                .with(GenSpec.containsIgnoreCase("title", title))
-                .with(GenSpec.containsIgnoreCase("author.name", author))
-                .with(GenSpec.equals("year", year))
-                .with(GenSpec.equals("publishedAt", publishedAt))
+                .with(GenSpec.containsIgnoreCase("title", search.title()))
+                .with(GenSpec.containsIgnoreCase("author.name", search.author()))
+                .with(GenSpec.equals("year", search.year()))
+                .with(GenSpec.equals("publishedAt", search.publishedAt()))
                 .build();
 
         return bookRepository.findAll(spec, pageable);
