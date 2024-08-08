@@ -1,6 +1,6 @@
 package com.luan.learnspring.controller;
 
-import com.luan.learnspring.dto.BookSearch;
+import com.luan.learnspring.dto.BookSearchDto;
 import com.luan.learnspring.model.Book;
 import com.luan.learnspring.repository.BookRepository;
 import com.luan.learnspring.specification.GenSpec;
@@ -21,8 +21,7 @@ public class BookController {
     public final BookRepository bookRepository;
 
     @GetMapping
-    public Page<Book> getBooks(Pageable pageable,
-                               BookSearch search) {
+    public Page<Book> getBooks(Pageable pageable, BookSearchDto search) {
         Specification<Book> spec = new SpecificationBuilder<Book>()
                 .with(GenSpec.containsIgnoreCase("title", search.title()))
                 .with(GenSpec.containsIgnoreCase("author.name", search.author()))
