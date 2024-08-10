@@ -1,5 +1,6 @@
 package com.luan.learnspring.specification;
 
+import com.luan.learnspring.util.StringUtils;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -38,7 +39,11 @@ public final class GenSpec {
             if (value == null) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.like(getPath(root, fieldName).as(String.class), value);
+
+            String processedValue = StringUtils.removeAccents(value);
+            Expression<String> expression = getPath(root, fieldName).as(String.class);
+
+            return criteriaBuilder.like(expression, processedValue);
         };
     }
 
@@ -55,7 +60,11 @@ public final class GenSpec {
             if (value == null) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.like(getPath(root, fieldName).as(String.class), "%" + value + "%");
+
+            String processedValue = StringUtils.removeAccents(value);
+            Expression<String> expression = getPath(root, fieldName).as(String.class);
+
+            return criteriaBuilder.like(expression, "%" + processedValue + "%");
         };
     }
 
@@ -72,8 +81,11 @@ public final class GenSpec {
             if (value == null) {
                 return criteriaBuilder.conjunction();
             }
-            Expression<String> lowerExpression = criteriaBuilder.lower(getPath(root, fieldName).as(String.class));
-            return criteriaBuilder.like(lowerExpression, "%" + value.toLowerCase() + "%");
+
+            String processedValue = StringUtils.removeAccents(value.toLowerCase());
+            Expression<String> expression = criteriaBuilder.lower(getPath(root, fieldName).as(String.class));
+
+            return criteriaBuilder.like(expression, "%" + processedValue + "%");
         };
     }
 
