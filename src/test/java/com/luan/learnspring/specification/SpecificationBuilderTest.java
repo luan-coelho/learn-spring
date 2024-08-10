@@ -2,13 +2,16 @@ package com.luan.learnspring.specification;
 
 import com.luan.learnspring.model.Author;
 import com.luan.learnspring.model.Book;
+import com.luan.learnspring.model.Phone;
 import com.luan.learnspring.repository.AuthorRepository;
 import com.luan.learnspring.repository.BookRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -16,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@Transactional
 @SpringBootTest
 class SpecificationBuilderTest {
 
@@ -33,17 +39,32 @@ class SpecificationBuilderTest {
     @Test
     void fromParams() {
         Map<String, String> params = new HashMap<>();
-        params.put("title", SpecificationBuilder.Operation.CONTAINS.getValue() + ",Philosophers Stone");
+        String equalsOperation = SpecificationBuilder.Operation.EQUALS.getValue();
+        String likeCaseOperation = SpecificationBuilder.Operation.LIKE.getValue();
+        String containsOperation = SpecificationBuilder.Operation.CONTAINS.getValue();
+        String containsIgnoreCaseOperation = SpecificationBuilder.Operation.CONTAINS_IGNORE_CASE.getValue();
+        params.put("title", equalsOperation + ",Philosophers Stone");
+        params.put("author.name", likeCaseOperation + ",Luan");
+        params.put("author.phone.number", containsOperation + ",3456");
+        params.put("author.phone.type", containsIgnoreCaseOperation + ",Mobile");
         Specification<Book> spec = new SpecificationBuilder<Book>()
                 .fromParams(params)
                 .build();
 
         List<Book> books = bookRepository.findAll(spec);
+
+        assertEquals(1, books.size());
     }
 
-    private void init() {
-        Author author1 = Author.builder().name("Luan").build();
-        Author author2 = Author.builder().name("João Silva").build();
+    protected void init() {
+        authorRepository.deleteAll();
+        bookRepository.deleteAll();
+
+        Phone phone1 = Phone.builder().number("123456789").type("mobile").build();
+        Phone phone2 = Phone.builder().number("987654321").type("home").build();
+
+        Author author1 = Author.builder().name("Luan").phone(phone1).build();
+        Author author2 = Author.builder().name("João Silva").phone(phone2).build();
 
         authorRepository.saveAll(Arrays.asList(author1, author2));
 

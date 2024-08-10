@@ -1,8 +1,6 @@
 package com.luan.learnspring.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,5 +15,7 @@ public class Author extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Phone phone;
 
 }

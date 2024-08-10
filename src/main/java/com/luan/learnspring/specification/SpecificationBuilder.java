@@ -45,7 +45,7 @@ public class SpecificationBuilder<T> {
         }
 
         if (operation.equals(Operation.LIKE.getValue())) {
-            specifications.add(GenSpec.contains(key, valuex));
+            specifications.add(GenSpec.like(key, valuex));
         }
 
         if (operation.equals(Operation.CONTAINS.getValue())) {
