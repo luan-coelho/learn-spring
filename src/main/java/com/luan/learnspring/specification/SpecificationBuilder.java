@@ -60,7 +60,7 @@ public class SpecificationBuilder<T> {
     @Getter
     public enum Operation {
 
-        EQUALS("ctn"), LIKE("lk"), CONTAINS("ctn"), CONTAINS_IGNORE_CASE("cic");
+        EQUALS("eq"), LIKE("lk"), CONTAINS("ctn"), CONTAINS_IGNORE_CASE("cic");
 
         private final String value;
 

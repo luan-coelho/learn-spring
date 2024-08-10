@@ -12,6 +12,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        type: TRACE
         show_sql: true
     hibernate:
       ddl-auto: create-drop
+
+logging:
+  level:
+    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE

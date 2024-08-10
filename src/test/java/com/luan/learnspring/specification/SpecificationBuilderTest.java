@@ -5,6 +5,7 @@ import com.luan.learnspring.model.Book;
 import com.luan.learnspring.model.Phone;
 import com.luan.learnspring.repository.AuthorRepository;
 import com.luan.learnspring.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
+@RequiredArgsConstructor
 @SpringBootTest
 class SpecificationBuilderTest {
 
